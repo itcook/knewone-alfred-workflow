@@ -1,4 +1,4 @@
 # knewone-alfred-workflow
 Query Knewone Newest Productions with Alfred.
 
-Download 
+Download knewone.workflow and run it!
