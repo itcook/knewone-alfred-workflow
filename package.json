@@ -1,0 +1,16 @@
+{
+  "name": "knewone-workflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "workflow.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wayne Lai",
+  "license": "ISC",
+  "dependencies": {
+    "alfred-item": "https://github.com/itcook/alfred-item.git",
+    "nodejs-fs-utils": "^1.0.26",
+    "superagent": "^1.8.3"
+  }
+}
