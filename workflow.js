@@ -16,11 +16,11 @@ function getImageExt(url) {
 
 
 function downloadImagesToTemp(products) {
-	fsu.emptyDirSync(tempPath);
+    fsu.emptyDirSync(tempPath);
     if (products) {
-    	let item = new AlfredItem();
+        let item = new AlfredItem();
         for (let i = 0; i < products.length; i++) {
-        	const iconUrl = products[i].photo.replace(/!huge$/, '')
+            const iconUrl = products[i].photo.replace(/!huge$/, '')
             const ext = getImageExt(iconUrl);
             const iconRequest = https.get(iconUrl + '!small');
             iconRequest.on('response', function(res) {
@@ -28,32 +28,28 @@ function downloadImagesToTemp(products) {
                     fs.writeFile(tempPath + 'item' + i + ext, chunk);
                 });
             });
-            item.addItem((i+2)+Math.random(), products[i].title, products[i].subtitle, products[i].url, tempPath + 'item' + i + ext);
+            item.addItem((i + 2) + Math.random(), products[i].title, products[i].subtitle, products[i].url, tempPath + 'item' + i + ext);
         }
         return item;
     }
 }
 
-const getKnewoneProducts = new Promise(function(resolve,reject){
-	request
-    .get("https://knewone.com/things")
-    .query({ pages: 0 })
-    .accept('json')
-    .end(function(err, res) {
-        if (!err && res.statusCode == 200 && res.body.length > 1) {
-        	// console.log(res.body);
-            resolve(res.body);
-        }
-        else {
-        	resolve(undefined);
-        }
-    });
+const getKnewoneProducts = new Promise(function(resolve, reject) {
+    request
+        .get("https://knewone.com/things")
+        .query({ pages: 0 })
+        .accept('json')
+        .end(function(err, res) {
+            if (!err && res.statusCode == 200 && res.body.length > 1) {
+                resolve(res.body);
+            } else {
+                resolve(undefined);
+            }
+        });
 });
 
-module.exports = function(){
-	let item = new AlfredItem();
-	getKnewoneProducts
-	.then(downloadImagesToTemp)
-	.then(console.log);
-	// console.log(item);	
+module.exports = function() {
+    getKnewoneProducts
+        .then(downloadImagesToTemp)
+        .then(console.log);
 };
