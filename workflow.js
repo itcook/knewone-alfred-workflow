@@ -23,23 +23,24 @@ function downloadImagesToTemp(products) {
             const iconUrl = products[i].photo.replace(/!huge$/, '')
             const ext = getImageExt(iconUrl);
             const iconRequest = https.get(iconUrl + '!small');
-            iconRequest.on('response', function(res) {
-                res.on('data', function(chunk) {
-                    fs.writeFile(tempPath + 'item' + i + ext, chunk);
+            const iconFilePath = tempPath + 'item' + i + ext;
+            iconRequest.on('response', res => {
+                res.on('data', chunk => {
+                    fs.writeFile(iconFilePath, chunk);
                 });
             });
-            item.addItem((i + 2) + Math.random(), products[i].title, products[i].subtitle, products[i].url, tempPath + 'item' + i + ext);
+            item.addItem((i + 2) + Math.random(), products[i].title, products[i].subtitle, products[i].url, iconFilePath);
         }
         return item;
     }
 }
 
-const getKnewoneProducts = new Promise(function(resolve, reject) {
+const getKnewoneProducts = new Promise((resolve, reject) => {
     request
         .get("https://knewone.com/things")
         .query({ pages: 0 })
         .accept('json')
-        .end(function(err, res) {
+        .end((err, res) => {
             if (!err && res.statusCode == 200 && res.body.length > 1) {
                 resolve(res.body);
             } else {
@@ -48,7 +49,7 @@ const getKnewoneProducts = new Promise(function(resolve, reject) {
         });
 });
 
-module.exports = function() {
+module.exports = () => {
     getKnewoneProducts
         .then(downloadImagesToTemp)
         .then(console.log);
